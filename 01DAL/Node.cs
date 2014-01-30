@@ -9,29 +9,41 @@ namespace _01DAL
 {
     public class Node
     {
-        private int x;
-        private int y;
-        private int x_max;
-        private int y_max;
+        private int _x;
+        private int _y;
+        private int _x_max;
+        private int _y_max;
 
-        public int X
+        public int x
         {
-            get { return x; }
-            set { x = (value >= 0 && value <= x_max) ? value : 0; }
+            get { return _x; }
+            set { _x = (value >= 0 && value <= _x_max) ? value : 0; }
         }
-        public int Y
+        public int y
         {
-            get { return y; }
-            set { y = (value >= 0 && value <= y_max) ? value : 0; }
+            get { return _y; }
+            set { _y = (value >= 0 && value <= _y_max) ? value : 0; }
         }
         public Node(int x = 0, int y = 0)
         {
-            int[] max = ConfigManager.GetIntArray("Map");
-            x_max = max[0];
-            y_max = max[1];
+            getConfig();
 
-            this.X = x;
-            this.Y = y;
+            this.x = x;
+            this.y = y;
+        }
+
+        private void getConfig()
+        {
+            int[] max = ConfigManager.GetIntArray("Map");
+            _x_max = max[0];
+            _y_max = max[1];
+        }
+        public Node(Node node)
+        {
+            getConfig();
+            this.x = node.x;
+            this.y = node.y;
+
         }
     }
 }
