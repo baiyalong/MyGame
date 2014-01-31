@@ -45,16 +45,16 @@ namespace _01DAL
 
         public void Init()
         {
-            int[] value = ConfigManager.GetIntArray("Map");
+            int[] value = Config.GetIntArray("Map");
             this.Length = value[0];
             this.Width = value[1];
 
             //初始化路线
-            int line = ConfigManager.GetInt("Line");
+            int line = Config.GetInt("Line");
             LineList = new List<Line>();
             for (var i = 1; i <= line; i++)
             {
-                LineList.Add(new Line(ConfigManager.GetIntArray("L_"+i.ToString())));
+                LineList.Add(new Line(Config.GetIntArray("L_"+i.ToString())));
             }
         }
     }

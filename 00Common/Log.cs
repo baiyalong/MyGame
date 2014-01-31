@@ -7,7 +7,7 @@ using log4net;
 
 namespace _00Common
 {
-    public static class LogManager
+    public static class Log
     {
 
 

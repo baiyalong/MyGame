@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using _00Common;
 
 namespace _01DAL
 {
@@ -69,5 +70,34 @@ namespace _01DAL
         }
 
 
+    }
+
+    public class LineList
+    {
+        private static LineList _instance = null;
+        public static LineList Instance
+        {
+            get
+            {
+                if(null == _instance)
+                {
+                    _instance = new LineList();
+                }
+                return _instance;
+            }
+        }
+        public LineList()
+        {
+            count = Config.GetInt("Line");
+        }
+        public int count
+        {
+            get;
+            private set;
+        }
+        public Node GetStationNode()
+        {
+            return null;
+        }
     }
 }

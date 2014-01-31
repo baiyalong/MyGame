@@ -7,9 +7,9 @@ using System.Configuration;
 
 namespace _00Common
 {
-    public static class ConfigManager
+    public static class Config
     {
-        public static string GetString(string key, string defaultValue = null)
+        private static string GetString(string key, string defaultValue = null)
         {
             string value = defaultValue;
             if (null != key && null != ConfigurationManager.AppSettings[key])
@@ -18,12 +18,11 @@ namespace _00Common
             }
             return value;
         }
-
-        public static int GetInt(string key, string defaultValue = null)
+        private static int GetInt(string key, string defaultValue = null)
         {
             return Convert.ToInt32(GetString(key, defaultValue));
         }
-        public static string[] GetStringArray(string key, int n = 0, string defaultValue = null)
+        private static string[] GetStringArray(string key, int n = 0, string defaultValue = null)
         {
             string[] stringArray = null;
             string value = GetString(key, defaultValue);
@@ -54,7 +53,7 @@ namespace _00Common
             }
             return stringArray;
         }
-        public static int[] GetIntArray(string key, int n = 0, string defaultValue = null)
+        private static int[] GetIntArray(string key, int n = 0, string defaultValue = null)
         {
             string[] stringArray = GetStringArray(key, n, defaultValue);
             int[] intArray = new int[stringArray.Length];
@@ -65,5 +64,45 @@ namespace _00Common
             return intArray;
         }
 
+        public static int FleetCount
+        {
+            get { return GetInt("FleetCount"); }
+        }
+        public static int[] BusCount
+        {
+            get { return GetIntArray("BusCount"); }
+        }
+        public static int BusSeatCount
+        {
+            get { return GetInt("BusSeatCount"); }
+        }
+        public static int BusLength
+        {
+            get { return GetInt("BusLength"); }
+        }
+        public static int[] BusSpeedRange
+        {
+            get { return GetIntArray("BusSpeedRange"); }
+        }
+        public static int PassengerCount
+        {
+            get { return GetInt("PassengerCount"); }
+        }
+        public static int LineCount
+        {
+            get { return GetInt("LineCount"); }
+        }
+        public static int[] StationCount
+        {
+            get { return GetIntArray("StationCount"); }
+        }
+        public static int[] Map
+        {
+            get { return GetIntArray("Map"); }
+        }
+        public static int[] LineNode(int lineNumber)
+        {
+            return GetIntArray("L_"+lineNumber.ToString());
+        }
     }
 }

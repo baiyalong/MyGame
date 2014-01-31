@@ -34,7 +34,7 @@ namespace _01DAL
 
         private void getConfig()
         {
-            int[] max = ConfigManager.GetIntArray("Map");
+            int[] max = Config.GetIntArray("Map");
             _x_max = max[0];
             _y_max = max[1];
         }

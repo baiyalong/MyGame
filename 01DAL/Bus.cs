@@ -32,10 +32,10 @@ namespace _01DAL
         public Bus(Line line)
         {
             Line = line;
-            Length = ConfigManager.GetInt("BusLength");
-            int[] value = ConfigManager.GetIntArray("BusSpeed");
+            Length = Config.GetInt("BusLength");
+            int[] value = Config.GetIntArray("BusSpeed");
             Speed = new SpeedRange(value[0], value[1]);
-            int seatCount = ConfigManager.GetInt("BusSeat");
+            int seatCount = Config.GetInt("BusSeat");
             for (var i = 0; i < seatCount; i++)
             {
                 Seat.Add(0);
@@ -45,7 +45,22 @@ namespace _01DAL
     }
 }
 
-
+public class BusList
+{
+    private static BusList _instance = null;
+    public static BusList Instance
+    {
+        get
+        {
+            if(null == _instance)
+            {
+                _instance = new BusList();
+            }
+            return _instance;
+        }
+    }
+    private BusList() { }
+}
 public class SpeedRange
 {
     public int Max

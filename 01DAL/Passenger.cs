@@ -16,7 +16,7 @@ namespace _01DAL
         }
         public enum State
         {
-            Wait,
+            OnWait,
             OnBus
         }
         public State state
@@ -34,12 +34,17 @@ namespace _01DAL
             get;
             private set;
         }
-        public int BusNumber
+        public int busNumber
         {
             get;
             set;
         }
-        public int SeatNumber
+        public int seatNumber
+        {
+            get;
+            set;
+        }
+        public int stationNumber
         {
             get;
             set;
@@ -52,12 +57,13 @@ namespace _01DAL
         public Passenger(int i)
         {
             number = i;
-            state = State.Wait;
-            startStationNumber = StationList.instance.GetRandomStationNumber();
-            terminalStationNumber = StationList.instance.GetRandomStationNumber();
-            BusNumber = 0;
-            SeatNumber = 0;
-            node = new Node(StationList.instance.list[startStationNumber].node);
+            state = State.OnWait;
+            startStationNumber = StationList.Instance.GetRandomStationNumber();
+            terminalStationNumber = StationList.Instance.GetRandomStationNumber();
+            busNumber = 0;
+            seatNumber = 0;
+            stationNumber = startStationNumber;
+            node = new Node(StationList.Instance.list[startStationNumber].node);
         }
 
     }
@@ -76,7 +82,7 @@ namespace _01DAL
         }
 
         private static PassengerList _instance = null;
-        public static PassengerList instance
+        public static PassengerList Instance
         {
             get
             {
@@ -90,7 +96,7 @@ namespace _01DAL
 
         private PassengerList()
         {
-            count = ConfigManager.GetInt("Passenger");
+            count = Config.GetInt("Passenger");
             list = new List<Passenger>(count);
             for (var i = 0; i < count; i++)
             {
