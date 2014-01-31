@@ -9,17 +9,12 @@ namespace _01DAL
 {
     public class Line
     {
+        public int Number
+        {
+            get;
+            private set;
+        }
         public List<Node> NodeList
-        {
-            get;
-            private set;
-        }
-        public List<Station> StationList
-        {
-            get;
-            private set;
-        }
-        public List<Bus> BusList
         {
             get;
             private set;
@@ -29,44 +24,56 @@ namespace _01DAL
             get;
             private set;
         }
-        public Line(int[] arr)
+        public Line(int number, int[] arr)
         {
-            if (null != arr && 0 == arr.Length % 2 && arr.Length > 2)
+            try
             {
-                NodeList = new List<Node>();
-                Length = 0;
-                for (var i = 0; i < arr.Length; i += 2)
+                if (null == arr || number <= 0 || 0 != arr.Length % 2 || arr.Length < 4)
                 {
-                    NodeList.Add(new Node(arr[i], arr[i + 1]));
-                    if (0 != i)
+                    throw new Exception();
+                }
+                for (int i = 0; i < arr.Length; i++)
+                {
+                    if ((0 == i % 2 && (arr[i] < 0 || arr[i] > Map.Instance.Length)) || (0 != i % 2) && (arr[i] < 0 || arr[i] > Map.Instance.Width))
                     {
-                        if (arr[i] == arr[i - 2])
-                        {
-                            Length += System.Math.Abs(arr[i + 1] - arr[i - 1]);
-                        }
-                        else if (arr[i + 1] == arr[i - 1])
-                        {
-                            Length += System.Math.Abs(arr[i] - arr[i - 2]);
-                        }
-                        else
-                        {
-                            //未定义
-                        }
+                        throw new Exception();
                     }
                 }
-
-                //初始化车站
-
-
-
-                //初始化车辆
-
-
+                this.Number = number;
+                Init(arr);
             }
-            else
+            catch (Exception ex)
             {
-                //error
+
             }
+        }
+
+        private void Init(int[] arr)
+        {
+
+            NodeList = new List<Node>();
+            Length = 0;
+            for (var i = 0; i < arr.Length; i += 2)
+            {
+                NodeList.Add(new Node(arr[i], arr[i + 1]));
+                if (0 != i)
+                {
+                    if (arr[i] == arr[i - 2])
+                    {
+                        Length += System.Math.Abs(arr[i + 1] - arr[i - 1]);
+                    }
+                    else if (arr[i + 1] == arr[i - 1])
+                    {
+                        Length += System.Math.Abs(arr[i] - arr[i - 2]);
+                    }
+                    else
+                    {
+                        //未定义
+                        throw new Exception();
+                    }
+                }
+            }
+
         }
 
 
@@ -79,25 +86,61 @@ namespace _01DAL
         {
             get
             {
-                if(null == _instance)
+                if (null == _instance)
                 {
                     _instance = new LineList();
                 }
                 return _instance;
             }
         }
-        public LineList()
+        private LineList()
         {
-            count = Config.GetInt("Line");
+            Init();
         }
-        public int count
+
+        private void Init()
+        {
+            try
+            {
+                Count = Config.LineCount;
+                if (Count <= 0)
+                {
+                    throw new Exception();
+                }
+
+                lineList = new List<Line>(Count);
+                for (int i = 1; i <= Count; i++)
+                {
+                    lineList[i] = new Line(i, Config.LineNode(i));
+                }
+
+            }
+            catch (Exception ex)
+            {
+            }
+
+        }
+        public int Count
         {
             get;
             private set;
         }
-        public Node GetStationNode()
+        public List<Line> lineList
         {
-            return null;
+            get;
+            private set;
+        }
+        public Line GetLine(int number)
+        {
+            Line line = null;
+            foreach(Line i in lineList)
+            {
+                if (number == i.Number)
+                {
+                    line = i;
+                }
+            }
+            return line;
         }
     }
 }

@@ -9,12 +9,8 @@ namespace _01DAL
 {
     public class Bus
     {
+        public static int length = Config.BusLength;
         public Line Line
-        {
-            get;
-            private set;
-        }
-        public int Length
         {
             get;
             private set;
@@ -32,10 +28,9 @@ namespace _01DAL
         public Bus(Line line)
         {
             Line = line;
-            Length = Config.GetInt("BusLength");
-            int[] value = Config.GetIntArray("BusSpeed");
+            int[] value = Config.BusSpeedRange;
             Speed = new SpeedRange(value[0], value[1]);
-            int seatCount = Config.GetInt("BusSeat");
+            int seatCount = Config.BusSeatCount;
             for (var i = 0; i < seatCount; i++)
             {
                 Seat.Add(0);

@@ -28,7 +28,7 @@ namespace _01DAL
         {
             this.number = number;
             this.lineNumber = lineNumber;
-            this.node = new Node(LineList.Instance.GetStationNode());
+            //this.node = new Node(LineList.Instance.GetStationNode());
         }
     }
     public class StationList
@@ -47,32 +47,56 @@ namespace _01DAL
         }
         private StationList()
         {
-            int[] value = Config.GetIntArray("Station");
-            count = 0;
-            list = new List<Station>();
+            Init();
 
-            for (int i = 0; i < value.Length; i++)
+        }
+
+        private void Init()
+        {
+            try
             {
-                for (int j = 0; j < value[j]; j++)
+                int[] value = Config.StationCount;
+                if (value.Length != Config.LineCount)
                 {
-                    list.Add(new Station(++count,i+1));
+                    throw new Exception();
                 }
+                for (int i = 0; i < value.Length; i++)
+                {
+                    if (value[i] < 2 || value[i] > LineList.Instance.lineList[i].Length / Bus.length)
+                    {
+                        throw new Exception();
+                    }
+                }
+                Count = 0;
+                stationList = new List<Station>();
+
+                for (int i = 1; i <= value.Length; i++)
+                {
+                    for (int j = 0; j < value[j]; j++)
+                    {
+                        stationList.Add(new Station(++Count, i));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
             }
 
         }
-        public List<Station> list
+        public List<Station> stationList
         {
             get;
             private set;
         }
-        public int count
+        public int Count
         {
             get;
             private set;
         }
-        public int GetRandomStationNumber()
-        {
-            return (new Random()).Next(1,count+1);
-        }
+        //public int GetRandomStationNumber()
+        //{
+        //    return (new Random()).Next(1, Count + 1);
+        //}
     }
 }

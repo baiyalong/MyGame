@@ -63,7 +63,7 @@ namespace _01DAL
             busNumber = 0;
             seatNumber = 0;
             stationNumber = startStationNumber;
-            node = new Node(StationList.Instance.list[startStationNumber].node);
+            node = new Node(StationList.Instance.stationList[startStationNumber].node);
         }
 
     }

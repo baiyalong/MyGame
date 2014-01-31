@@ -37,24 +37,22 @@ namespace _01DAL
             private set;
         }
 
-        public List<Line> LineList
+        private void Init()
         {
-            get;
-            private set;
-        }
-
-        public void Init()
-        {
-            int[] value = Config.GetIntArray("Map");
-            this.Length = value[0];
-            this.Width = value[1];
-
-            //初始化路线
-            int line = Config.GetInt("Line");
-            LineList = new List<Line>();
-            for (var i = 1; i <= line; i++)
+            try
             {
-                LineList.Add(new Line(Config.GetIntArray("L_"+i.ToString())));
+                int[] value = Config.Map;
+                if (value[0] <= 0 || value[1] <= 0)
+                {
+                    throw new Exception();
+                }
+
+                this.Length = value[0];
+                this.Width = value[1];
+            }
+            catch (Exception ex)
+            {
+
             }
         }
     }

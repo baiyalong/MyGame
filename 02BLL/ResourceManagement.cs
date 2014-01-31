@@ -26,11 +26,11 @@ namespace _02BLL
         {
             this.State = eState.stoped;
         }
-        enum eState { stoped,init,running,suspend}
+        public enum eState { stoped,init,running,suspend}
         public eState State
         {
             get;
-            private set;
+            set;
         }
         public Map iMap
         {
@@ -57,9 +57,8 @@ namespace _02BLL
             get;
             private set;
         }
-        public bool Init()
+        public void Init()
         {
-            bool res = false;
 
             //init map
             iMap = Map.Instance;
@@ -73,24 +72,19 @@ namespace _02BLL
             iPassengerList = PassengerList.Instance;
 
 
-            return res;
         }
-        public bool Start()
+        public void Start()
         {
-            return true;
         }
 
-        public bool Suspend()
+        public void Suspend()
         {
-            return true;
         }
-        public bool Continue()
+        public void Continue()
         {
-            return true;
         }
-        public bool Stop()
+        public void Stop()
         {
-            return true;
         }
     }
 }
