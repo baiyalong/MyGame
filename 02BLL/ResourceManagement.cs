@@ -37,22 +37,22 @@ namespace _02BLL
             get;
             private set;
         }
-        public LineList iLineList
+        public LineManagenment iLineList
         {
             get;
             private set;
         }
-        public StationList iStationList
+        public StationManagenment iStationList
         {
             get;
             private set;
         }
-        public BusList iBusList
+        public BusManagement iBusList
         {
             get;
             private set;
         }
-        public PassengerList iPassengerList
+        public PassengerManagement iPassengerList
         {
             get;
             private set;
@@ -63,13 +63,13 @@ namespace _02BLL
             //init map
             iMap = Map.Instance;
             //init line
-            iLineList = LineList.Instance;
+            iLineList = LineManagenment.Instance;
             //init station
-            iStationList = StationList.Instance;
+            iStationList = StationManagenment.Instance;
             //init bus
-            iBusList = BusList.Instance;
+            iBusList = BusManagement.Instance;
             //init passenger
-            iPassengerList = PassengerList.Instance;
+            iPassengerList = PassengerManagement.Instance;
 
 
         }

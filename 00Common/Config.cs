@@ -64,45 +64,215 @@ namespace _00Common
             return intArray;
         }
 
-        public static int FleetCount
-        {
-            get { return GetInt("FleetCount"); }
-        }
         public static int[] BusCount
         {
-            get { return GetIntArray("BusCount"); }
+            get
+            {
+                int[] busCount = null;
+                try
+                {
+                    busCount = GetIntArray("BusCount");
+                    if (busCount.Length != LineCount)
+                    {
+                        throw new Exception();
+                    }
+                    foreach (var item in busCount)
+                    {
+                        if (item <= 0)
+                        {
+                            throw new Exception();
+                        }
+                    }
+                }
+                catch (Exception ex) { }
+                return busCount;
+            }
         }
         public static int BusSeatCount
         {
-            get { return GetInt("BusSeatCount"); }
+            get
+            {
+                int value = 0;
+                try
+                {
+                    value = GetInt("BusSeatCount");
+                    if (value <= 0)
+                    {
+                        throw new Exception();
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    throw;
+                }
+                return value;
+            }
         }
         public static int BusLength
         {
-            get { return GetInt("BusLength"); }
+            get
+            {
+                int value = 0;
+                try
+                {
+                    value = GetInt("BusLength");
+                    if (value <= 0)
+                    {
+                        throw new Exception();
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    throw;
+                }
+                return value;
+            }
         }
         public static int[] BusSpeedRange
         {
-            get { return GetIntArray("BusSpeedRange"); }
+            get
+            {
+                int[] value = null;
+                try
+                {
+                    value = GetIntArray("BusSpeedRange");
+                    if (value.Length != 2)
+                    {
+                        throw new Exception();
+                    }
+                    foreach (var item in value)
+                    {
+                        if (item <= 0)
+                        {
+                            throw new Exception();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    throw;
+                }
+                return value;
+            }
         }
         public static int PassengerCount
         {
-            get { return GetInt("PassengerCount"); }
+            get
+            {
+                int value = 0;
+                try
+                {
+                    value = GetInt("PassengerCount");
+                    if (value <= 0)
+                    {
+                        throw new Exception();
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    throw;
+                }
+                return value;
+            }
         }
         public static int LineCount
         {
-            get { return GetInt("LineCount"); }
+            get
+            {
+                int lineCount = 0;
+                try
+                {
+                    lineCount = GetInt("LineCount");
+                    if (lineCount <= 0 || lineCount > 100)
+                    {
+                        throw new Exception();
+                    }
+
+                }
+                catch (Exception ex)
+                {
+
+                }
+                return lineCount;
+
+            }
         }
         public static int[] StationCount
         {
-            get { return GetIntArray("StationCount"); }
+            get
+            {
+                int[] value = null;
+                try
+                {
+                    value = GetIntArray("StationCount");
+                    if (value.Length != LineCount)
+                    {
+                        throw new Exception();
+                    }
+                    for (int i = 0; i < value.Length; i++)
+                    {
+                        if (value[i] < 2)
+                        {
+                            throw new Exception();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    throw;
+                }
+                return value;
+            }
         }
         public static int[] Map
         {
-            get { return GetIntArray("Map"); }
+            get
+            {
+                int[] map = null;
+                try
+                {
+                    map = GetIntArray("Map");
+                    if (map.Length != 2 || map[0] <= 0 || map[1] <= 0)
+                    {
+                        throw new Exception();
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                }
+                return map;
+            }
         }
         public static int[] LineNode(int lineNumber)
         {
-            return GetIntArray("L_"+lineNumber.ToString());
+            int[] arr = null;
+            try
+            {
+                arr = GetIntArray("L_" + lineNumber.ToString());
+                if (null == arr || 0 != arr.Length % 2 || arr.Length < 4)
+                {
+                    throw new Exception();
+                }
+                for (int i = 0; i < arr.Length; i++)
+                {
+                    if ((0 == i % 2 && (arr[i] < 0 || arr[i] > Map[0])) || (0 != i % 2) && (arr[i] < 0 || arr[i] > Map[1]))
+                    {
+                        throw new Exception();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            return arr;
         }
     }
 }

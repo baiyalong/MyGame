@@ -9,69 +9,93 @@ namespace _01DAL
 {
     public class Bus
     {
-        public static int length = Config.BusLength;
+        public int Number
+        {
+            get;
+            private set;
+        }
+        private static int _seatCount = Config.BusSeatCount;
+        private static int _length = Config.BusLength;
+        private static int _speed_max = System.Math.Max(Config.BusSpeedRange[0], Config.BusSpeedRange[1]);
+        private static int _speed_min = System.Math.Min(Config.BusSpeedRange[0], Config.BusSpeedRange[1]);
+        public static int SeatCount { get { return _seatCount; } }
+        public static int Length { get { return _length; } }
+        public static int SpeedMax { get { return _speed_max; } }
+        public static int SpeedMin { get { return _speed_min; } }
         public Line Line
         {
             get;
             private set;
         }
-        public SpeedRange Speed
-        {
-            get;
-            private set;
-        }
-        public List<int> Seat
+        public Passenger[] SeatArr
         {
             get;
             set;
         }
-        public Bus(Line line)
+        public Node BusNode
+        {
+            get;
+            set;
+        }
+        public int Speed
+        {
+            get;
+            set;
+        }
+        public Bus(Line line, int number)
         {
             Line = line;
-            int[] value = Config.BusSpeedRange;
-            Speed = new SpeedRange(value[0], value[1]);
-            int seatCount = Config.BusSeatCount;
-            for (var i = 0; i < seatCount; i++)
-            {
-                Seat.Add(0);
-            }
+            Number = number;
+            SeatArr = new Passenger[SeatCount];
+            Speed = 0;
+            BusNode = new Node(Line.StationArr[0].StationNode);
         }
-        
-    }
-}
 
-public class BusList
-{
-    private static BusList _instance = null;
-    public static BusList Instance
+    }
+
+
+    public class BusManagement
     {
-        get
+        private static BusManagement _instance = null;
+        public static BusManagement Instance
         {
-            if(null == _instance)
+            get
             {
-                _instance = new BusList();
+                if (null == _instance)
+                {
+                    _instance = new BusManagement();
+                }
+                return _instance;
             }
-            return _instance;
+        }
+        private BusManagement()
+        {
+            Init();
+        }
+        public int BusCount
+        {
+            get;
+            private set;
+        }
+        public Bus[] BusArr
+        {
+            get;
+            private set;
+        }
+        private void Init()
+        {
+            int[] value = Config.BusCount;
+            this.BusCount = value.Sum();
+            this.BusArr = new Bus[this.BusCount];
+
+            int count = 0;
+            for (int i = 0; i < value.Length; i++)
+            {
+                for (int j = 0; j < value[i]; j++)
+                {
+                    this.BusArr[count++] = new Bus(LineManagenment.Instance.LineArr[i],count);
+                }
+            }
         }
     }
-    private BusList() { }
-}
-public class SpeedRange
-{
-    public int Max
-    {
-        get;
-        private set;
-    }
-    public int Min
-    {
-        get;
-        private set;
-    }
-    public SpeedRange(int a, int b)
-    {
-        Max = System.Math.Max(a, b);
-        Min = System.Math.Min(a, b);
-    }
-
 }

@@ -13,25 +13,25 @@ namespace _01DAL
         {
             Init();
         }
-        private static Map instance = null;
+        private static Map _instance = null;
 
         public static Map Instance
         {
             get
             {
-                if (null == instance)
+                if (null == _instance)
                 {
-                    instance = new Map();
+                    _instance = new Map();
                 }
-                return instance;
+                return _instance;
             }
         }
-        public int Length
+        public int X
         {
             get;
             private set;
         }
-        public int Width
+        public int Y
         {
             get;
             private set;
@@ -39,21 +39,9 @@ namespace _01DAL
 
         private void Init()
         {
-            try
-            {
-                int[] value = Config.Map;
-                if (value[0] <= 0 || value[1] <= 0)
-                {
-                    throw new Exception();
-                }
-
-                this.Length = value[0];
-                this.Width = value[1];
-            }
-            catch (Exception ex)
-            {
-
-            }
+            int[] value = Config.Map;
+            this.X = value[0];
+            this.Y = value[1];
         }
     }
 }

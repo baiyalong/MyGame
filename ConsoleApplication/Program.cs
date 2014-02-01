@@ -20,7 +20,8 @@ namespace ConsoleApplication
         {
 
             log.Info("Info logging");
-
+            int[] arr = new int[Config.LineCount];
+            arr.Initialize();
             Console.Read();
         }
     }

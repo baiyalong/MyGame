@@ -14,133 +14,294 @@ namespace _01DAL
             get;
             private set;
         }
-        public List<Node> NodeList
+        public Node[] NodeArr
         {
             get;
             private set;
         }
-        public int Length
+        public Station[] StationArr
+        {
+            get;
+            set;
+        }
+        public double Length
         {
             get;
             private set;
         }
         public Line(int number, int[] arr)
         {
-            try
-            {
-                if (null == arr || number <= 0 || 0 != arr.Length % 2 || arr.Length < 4)
-                {
-                    throw new Exception();
-                }
-                for (int i = 0; i < arr.Length; i++)
-                {
-                    if ((0 == i % 2 && (arr[i] < 0 || arr[i] > Map.Instance.Length)) || (0 != i % 2) && (arr[i] < 0 || arr[i] > Map.Instance.Width))
-                    {
-                        throw new Exception();
-                    }
-                }
-                this.Number = number;
-                Init(arr);
-            }
-            catch (Exception ex)
-            {
-
-            }
+            Init(number, arr);
         }
 
-        private void Init(int[] arr)
+        private void Init(int number, int[] arr)
         {
-
-            NodeList = new List<Node>();
+            this.Number = number;
+            NodeArr = new Node[arr.Length / 2];
             Length = 0;
             for (var i = 0; i < arr.Length; i += 2)
             {
-                NodeList.Add(new Node(arr[i], arr[i + 1]));
-                if (0 != i)
+                NodeArr[i / 2] = new Node(arr[i], arr[i + 1]);
+                if (i != 0)
                 {
-                    if (arr[i] == arr[i - 2])
-                    {
-                        Length += System.Math.Abs(arr[i + 1] - arr[i - 1]);
-                    }
-                    else if (arr[i + 1] == arr[i - 1])
-                    {
-                        Length += System.Math.Abs(arr[i] - arr[i - 2]);
-                    }
-                    else
-                    {
-                        //未定义
-                        throw new Exception();
-                    }
+                    Length += Node.Distance(NodeArr[i], NodeArr[i - 1]);
                 }
             }
 
         }
 
+        internal void SetStationNode()
+        {
+            int stationCount = StationArr.Length;
+            int nodeCount = NodeArr.Length;
+            double lineLength = Length;
 
+            StationArr[0].StationNode = new Node(NodeArr[0]);
+            StationArr[StationArr.Length - 1].StationNode = new Node(NodeArr[NodeArr.Length - 1]);
+
+            List<Node> crossNodeList = LineManagenment.Instance.GetCrossNodeList(this);
+
+            int lastStationCount = stationCount - 2;
+            int segment = (int)this.Length / (lastStationCount - crossNodeList.Count + 1);
+            int lineNode = 0;
+            int crossNodeCount = 0;
+            int stationNodeCount = 1;
+            if (NodeArr.Length == 2)
+            {
+                for (; lastStationCount > 0; lastStationCount--)
+                {
+                    if (NodeArr[0].X == NodeArr[1].X)
+                    {
+                        lineNode = (lineNode == 0) ? NodeArr[0].Y : lineNode;
+                        lineNode += segment;
+                        if (lineNode == crossNodeList[crossNodeCount].Y)
+                        {
+                            throw new Exception();
+                        }
+                        while (lineNode > crossNodeList[crossNodeCount].Y)
+                        {
+                            StationArr[stationNodeCount++].StationNode = new Node(crossNodeList[crossNodeCount++]);
+                        }
+                        StationArr[stationNodeCount++].StationNode = new Node(NodeArr[0].X, lineNode);
+
+                    }
+                    else if (NodeArr[0].Y == NodeArr[1].Y)
+                    {
+                        lineNode = (lineNode == 0) ? NodeArr[0].X : lineNode;
+                        lineNode += segment;
+                        if (lineNode == crossNodeList[crossNodeCount].X)
+                        {
+                            throw new Exception();
+                        }
+                        while (lineNode > crossNodeList[crossNodeCount].X)
+                        {
+                            StationArr[stationNodeCount++].StationNode = new Node(crossNodeList[crossNodeCount++]);
+                        }
+                        StationArr[stationNodeCount++].StationNode = new Node(NodeArr[0].Y, lineNode);
+
+                    }
+                    else
+                    {
+                        throw new NotImplementedException();
+                    }
+                }
+            }
+            else if (NodeArr.Length == 3)
+            {
+                int flag = 0;
+                for (; lastStationCount > 0; lastStationCount--)
+                {
+                    if (NodeArr[0].X == NodeArr[1].X)
+                    {
+                        lineNode = (lineNode == 0) ? NodeArr[0].Y : lineNode;
+                        lineNode += segment;
+                        if (lineNode <= NodeArr[1].Y)
+                        {
+                            if (lineNode == crossNodeList[crossNodeCount].Y)
+                            {
+                                throw new Exception();
+                            }
+                            while (lineNode > crossNodeList[crossNodeCount].Y)
+                            {
+                                StationArr[stationNodeCount++].StationNode = new Node(crossNodeList[crossNodeCount++]);
+                            }
+                            StationArr[stationNodeCount++].StationNode = new Node(NodeArr[0].X, lineNode);
+
+                        }
+                        else
+                        {
+                            while (NodeArr[1].Y > crossNodeList[crossNodeCount].Y)
+                            {
+                                StationArr[stationNodeCount++].StationNode = new Node(crossNodeList[crossNodeCount++]);
+                            }
+                            if (flag == 0)
+                            {
+                                flag = 1;
+                                lineNode = NodeArr[1].X + (lineNode - NodeArr[1].Y);
+                            }
+                            if (lineNode == crossNodeList[crossNodeCount].X)
+                            {
+                                throw new Exception();
+                            }
+                            while (lineNode > crossNodeList[crossNodeCount].X)
+                            {
+                                StationArr[stationNodeCount++].StationNode = new Node(crossNodeList[crossNodeCount++]);
+                            }
+                            StationArr[stationNodeCount++].StationNode = new Node(NodeArr[1].Y, lineNode);
+
+                        }
+
+                    }
+                    else if (NodeArr[0].Y == NodeArr[1].Y)
+                    {
+                        lineNode = (lineNode == 0) ? NodeArr[0].X : lineNode;
+                        lineNode += segment;
+                        if (lineNode <= NodeArr[1].X)
+                        {
+                            if (lineNode == crossNodeList[crossNodeCount].X)
+                            {
+                                throw new Exception();
+                            }
+                            while (lineNode > crossNodeList[crossNodeCount].X)
+                            {
+                                StationArr[stationNodeCount++].StationNode = new Node(crossNodeList[crossNodeCount++]);
+                            }
+                            StationArr[stationNodeCount++].StationNode = new Node(NodeArr[0].Y, lineNode);
+                        }
+                        else
+                        {
+                            while (NodeArr[1].X > crossNodeList[crossNodeCount].X)
+                            {
+                                StationArr[stationNodeCount++].StationNode = new Node(crossNodeList[crossNodeCount++]);
+                            }
+                            if (flag == 0)
+                            {
+                                flag = 1;
+                                lineNode = NodeArr[1].Y + (lineNode - NodeArr[1].X);
+                            }
+                            if (lineNode == crossNodeList[crossNodeCount].Y)
+                            {
+                                throw new Exception();
+                            }
+                            while (lineNode > crossNodeList[crossNodeCount].Y)
+                            {
+                                StationArr[stationNodeCount++].StationNode = new Node(crossNodeList[crossNodeCount++]);
+                            }
+                            StationArr[stationNodeCount++].StationNode = new Node(NodeArr[1].X, lineNode);
+
+                        }
+
+                    }
+                    else
+                    {
+                        throw new NotImplementedException();
+                    }
+                }
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 
-    public class LineList
+    public class LineManagenment
     {
-        private static LineList _instance = null;
-        public static LineList Instance
+        private static LineManagenment _instance = null;
+        public static LineManagenment Instance
         {
             get
             {
                 if (null == _instance)
                 {
-                    _instance = new LineList();
+                    _instance = new LineManagenment();
                 }
                 return _instance;
             }
         }
-        private LineList()
+        private LineManagenment()
         {
             Init();
         }
 
         private void Init()
         {
-            try
-            {
-                Count = Config.LineCount;
-                if (Count <= 0)
-                {
-                    throw new Exception();
-                }
 
-                lineList = new List<Line>(Count);
-                for (int i = 1; i <= Count; i++)
-                {
-                    lineList[i] = new Line(i, Config.LineNode(i));
-                }
-
-            }
-            catch (Exception ex)
+            LineCount = Config.LineCount;
+            LineArr = new Line[LineCount];
+            for (int i = 0; i < LineCount; i++)
             {
+                LineArr[i] = new Line(i + 1, Config.LineNode(i + 1));
             }
 
         }
-        public int Count
+        public int LineCount
         {
             get;
             private set;
         }
-        public List<Line> lineList
+        public Line[] LineArr
         {
             get;
             private set;
         }
-        public Line GetLine(int number)
+
+
+        internal List<Node> GetCrossNodeList(Line line)
         {
-            Line line = null;
-            foreach(Line i in lineList)
+            List<Node> nodeList = new List<Node>();
+            foreach (Line item in this.LineArr)
             {
-                if (number == i.Number)
+                if (!item.Equals(line))
                 {
-                    line = i;
+                    for (int i = 0; i < item.NodeArr.Length - 1; i++)
+                    {
+                        for (int j = 0; j < line.NodeArr.Length - 1; j++)
+                        {
+                            Node node = GetCrossNode(item.NodeArr[i], item.NodeArr[i + 1], line.NodeArr[j], line.NodeArr[j + 1]);
+                            if (node != null)
+                            {
+                                nodeList.Add(node);
+                            }
+
+                        }
+
+                    }
                 }
             }
-            return line;
+
+            return nodeList;
+        }
+
+        private Node GetCrossNode(Node node1, Node node2, Node node3, Node node4)
+        {
+            Node node = null;
+            int x, y;
+            if (node1.X == node2.X && node3.Y == node4.Y)
+            {
+                x = node1.X;
+                y = node3.Y;
+                if (x >= System.Math.Min(node3.X, node4.X)
+                  && x <= System.Math.Max(node3.X, node4.Y)
+                  && y >= System.Math.Min(node1.Y, node2.Y)
+                  && y <= System.Math.Max(node1.Y, node2.Y))
+                {
+                    node = new Node(x, y);
+                }
+            }
+            else if (node3.X == node4.X && node1.Y == node2.Y)
+            {
+                x = node3.X;
+                y = node1.Y;
+                if (x >= System.Math.Min(node1.X, node2.X)
+                  && x <= System.Math.Max(node1.X, node2.Y)
+                  && y >= System.Math.Min(node3.Y, node4.Y)
+                  && y <= System.Math.Max(node3.Y, node4.Y))
+                {
+                    node = new Node(x, y);
+                }
+            }
+            return node;
         }
     }
 }

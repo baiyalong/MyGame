@@ -9,98 +9,98 @@ namespace _01DAL
 {
     public class Passenger
     {
-        public int number
+        public int Number
         {
             get;
             private set;
         }
-        public enum State
+        public enum eState
         {
             OnWait,
             OnBus
         }
-        public State state
+        public eState State
         {
             get;
             set;
         }
-        public int startStationNumber
+        public Station StartStation
         {
             get;
             private set;
         }
-        public int terminalStationNumber
+        public Station TerminalStation
         {
             get;
             private set;
         }
-        public int busNumber
+        public Bus OnTheGoBus
         {
             get;
             set;
         }
-        public int seatNumber
+        public int SeatNumber
         {
             get;
             set;
         }
-        public int stationNumber
+        public Station StandByStation
         {
             get;
             set;
         }
-        public Node node
+        public Node PassengerNode
         {
             get;
             set;
         }
         public Passenger(int i)
         {
-            number = i;
-            state = State.OnWait;
-            startStationNumber = StationList.Instance.GetRandomStationNumber();
-            terminalStationNumber = StationList.Instance.GetRandomStationNumber();
-            busNumber = 0;
-            seatNumber = 0;
-            stationNumber = startStationNumber;
-            node = new Node(StationList.Instance.stationList[startStationNumber].node);
+            this.Number = i;
+            this.State = eState.OnWait;
+            this.StartStation = StationManagenment.Instance.GetRandomStation();
+            this.TerminalStation = StationManagenment.Instance.GetRandomStation();
+            this.OnTheGoBus = null;
+            this.SeatNumber = 0;
+            this.StandByStation = this.StartStation;
+            this.PassengerNode = new Node(this.StandByStation.StationNode);
         }
 
     }
 
-    public class PassengerList
+    public class PassengerManagement
     {
-        public int count
+        public int PassengerCount
         {
             get;
             private set;
         }
-        public List<Passenger> list
+        public Passenger[] PassengerArr
         {
             get;
             private set;
         }
 
-        private static PassengerList _instance = null;
-        public static PassengerList Instance
+        private static PassengerManagement _instance = null;
+        public static PassengerManagement Instance
         {
             get
             {
                 if (null == _instance)
                 {
-                    _instance = new PassengerList();
+                    _instance = new PassengerManagement();
                 }
                 return _instance;
             }
         }
 
-        private PassengerList()
+        private PassengerManagement()
         {
-            count = Config.GetInt("Passenger");
-            list = new List<Passenger>(count);
-            for (var i = 0; i < count; i++)
+            this.PassengerCount = Config.PassengerCount;
+            this.PassengerArr = new Passenger[this.PassengerCount];
+            for (var i = 0; i < PassengerCount; i++)
             {
-                list[i] = new Passenger(i + 1);
+                PassengerArr[i] = new Passenger(i + 1);
             }
         }
 

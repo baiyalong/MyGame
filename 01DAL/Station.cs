@@ -9,43 +9,43 @@ namespace _01DAL
 {
     public class Station
     {
-        public Node node
+        public Node StationNode
         {
             get;
-            set;
+            internal set;
         }
-        public int number
-        {
-            get;
-            private set;
-        }
-        public int lineNumber
+        public int Number
         {
             get;
             private set;
         }
-        public Station(int number, int lineNumber)
+        public int LineNumber
         {
-            this.number = number;
-            this.lineNumber = lineNumber;
-            //this.node = new Node(LineList.Instance.GetStationNode());
+            get;
+            private set;
+        }
+        public Station(int number, int lineNumber, Node node)
+        {
+            this.Number = number;
+            this.LineNumber = lineNumber;
+            this.StationNode = node;
         }
     }
-    public class StationList
+    public class StationManagenment
     {
-        private static StationList _instance = null;
-        public static StationList Instance
+        private static StationManagenment _instance = null;
+        public static StationManagenment Instance
         {
             get
             {
                 if (null == _instance)
                 {
-                    _instance = new StationList();
+                    _instance = new StationManagenment();
                 }
                 return _instance;
             }
         }
-        private StationList()
+        private StationManagenment()
         {
             Init();
 
@@ -53,50 +53,38 @@ namespace _01DAL
 
         private void Init()
         {
-            try
-            {
-                int[] value = Config.StationCount;
-                if (value.Length != Config.LineCount)
-                {
-                    throw new Exception();
-                }
-                for (int i = 0; i < value.Length; i++)
-                {
-                    if (value[i] < 2 || value[i] > LineList.Instance.lineList[i].Length / Bus.length)
-                    {
-                        throw new Exception();
-                    }
-                }
-                Count = 0;
-                stationList = new List<Station>();
+            int[] value = Config.StationCount;
+            StationCount = value.Sum();
+            StationArr = new Station[StationCount];
 
-                for (int i = 1; i <= value.Length; i++)
-                {
-                    for (int j = 0; j < value[j]; j++)
-                    {
-                        stationList.Add(new Station(++Count, i));
-                    }
-                }
-            }
-            catch (Exception ex)
+            int count = 0;
+            for (int i = 0; i < value.Length; i++)
             {
-
+                LineManagenment.Instance.LineArr[i].StationArr = new Station[value[i]];
+                for (int j = 0; j < value[i]; j++)
+                {
+                    Station station = new Station(count, i + 1, null);
+                    StationArr[count] = station;
+                    LineManagenment.Instance.LineArr[i].StationArr[j] = station;
+                }
+                LineManagenment.Instance.LineArr[i].SetStationNode();
             }
 
         }
-        public List<Station> stationList
+        public Station[] StationArr
         {
             get;
             private set;
         }
-        public int Count
+        public int StationCount
         {
             get;
             private set;
         }
-        //public int GetRandomStationNumber()
-        //{
-        //    return (new Random()).Next(1, Count + 1);
-        //}
+        public Station GetRandomStation()
+        {
+            int rand = (new Random()).Next(0, this.StationArr.Length);
+            return this.StationArr[rand];
+        }
     }
 }

@@ -9,12 +9,12 @@ namespace _01DAL
 {
     public class Node
     {
-        public int x
+        public int X
         {
             get;
             set;
         }
-        public int y
+        public int Y
         {
             get;
             set;
@@ -23,12 +23,12 @@ namespace _01DAL
         {
             try
             {
-                if (x < 0 || x > Map.Instance.Length || y < 0 || y > Map.Instance.Width)
+                if (x < 0 || x > Map.Instance.X || y < 0 || y > Map.Instance.Y)
                 {
                     throw new Exception();
                 }
-                this.x = x;
-                this.y = y;
+                this.X = x;
+                this.Y = y;
 
             }
             catch (Exception ex)
@@ -38,9 +38,13 @@ namespace _01DAL
         }
         public Node(Node node)
         {
-            this.x = node.x;
-            this.y = node.y;
+            this.X = node.X;
+            this.Y = node.Y;
 
+        }
+        public static double Distance(Node node1, Node node2)
+        {
+            return System.Math.Sqrt(System.Math.Pow(node1.X - node2.X, 2) + System.Math.Pow(node1.Y - node2.Y, 2));
         }
     }
 }
