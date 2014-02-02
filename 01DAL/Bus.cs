@@ -42,6 +42,16 @@ namespace _01DAL
             get;
             set;
         }
+        public enum eDirection
+        {
+            Forward,
+            Reverse
+        }
+        public eDirection Direction
+        {
+            get;
+            set;
+        }
         public Bus(Line line, int number)
         {
             Line = line;
@@ -49,6 +59,7 @@ namespace _01DAL
             SeatArr = new Passenger[SeatCount];
             Speed = 0;
             BusNode = new Node(Line.StationArr[0].StationNode);
+            this.Direction = eDirection.Forward;
         }
 
     }

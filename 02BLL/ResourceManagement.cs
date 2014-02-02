@@ -15,7 +15,7 @@ namespace _02BLL
         {
             get
             {
-                if(null == _instance)
+                if (null == _instance)
                 {
                     _instance = new ResourceManagement();
                 }
@@ -26,7 +26,7 @@ namespace _02BLL
         {
             this.State = eState.stoped;
         }
-        public enum eState { stoped,init,running,suspend}
+        public enum eState { stoped, init, running, suspend }
         public eState State
         {
             get;
@@ -59,32 +59,59 @@ namespace _02BLL
         }
         public void Init()
         {
+            try
+            {
+                //init map
+                iMap = Map.Instance;
+                //init line
+                iLineList = LineManagenment.Instance;
+                //init station
+                iStationList = StationManagenment.Instance;
+                //init bus
+                iBusList = BusManagement.Instance;
+                //init passenger
+                iPassengerList = PassengerManagement.Instance;
+            }
+            catch (Exception)
+            {
 
-            //init map
-            iMap = Map.Instance;
-            //init line
-            iLineList = LineManagenment.Instance;
-            //init station
-            iStationList = StationManagenment.Instance;
-            //init bus
-            iBusList = BusManagement.Instance;
-            //init passenger
-            iPassengerList = PassengerManagement.Instance;
+                throw;
+            }
 
+            this.State = eState.init;
 
         }
         public void Start()
         {
+            this.State = eState.running;
+            try
+            {
+                while (true)
+                {
+                    
+                }
+
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
         }
 
         public void Suspend()
         {
+            throw new NotImplementedException();
         }
         public void Continue()
         {
+            throw new NotImplementedException();
+
         }
         public void Stop()
         {
+            throw new NotImplementedException();
+
         }
     }
 }
