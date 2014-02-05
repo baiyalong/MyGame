@@ -42,9 +42,9 @@ namespace _01DAL
             for (var i = 0; i < arr.Length; i += 2)
             {
                 NodeArr[i / 2] = new Node(arr[i], arr[i + 1]);
-                if (i != 0)
+                if (i/2 != 0)
                 {
-                    Length += Node.Distance(NodeArr[i], NodeArr[i - 1]);
+                    Length += Node.Distance(NodeArr[i/2], NodeArr[i/2 - 1]);
                 }
             }
 

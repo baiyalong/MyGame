@@ -67,7 +67,7 @@ namespace _01DAL
                     StationArr[count] = station;
                     LineManagenment.Instance.LineArr[i].StationArr[j] = station;
                 }
-                LineManagenment.Instance.LineArr[i].SetStationNode();
+                //LineManagenment.Instance.LineArr[i].SetStationNode();
             }
 
         }

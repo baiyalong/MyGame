@@ -58,7 +58,8 @@ namespace _01DAL
             Number = number;
             SeatArr = new Passenger[SeatCount];
             Speed = 0;
-            BusNode = new Node(Line.StationArr[0].StationNode);
+            if (Line.StationArr[0].StationNode != null)
+                BusNode = new Node(Line.StationArr[0].StationNode);
             this.Direction = eDirection.Forward;
         }
 
@@ -104,7 +105,7 @@ namespace _01DAL
             {
                 for (int j = 0; j < value[i]; j++)
                 {
-                    this.BusArr[count++] = new Bus(LineManagenment.Instance.LineArr[i],count);
+                    this.BusArr[count++] = new Bus(LineManagenment.Instance.LineArr[i], count);
                 }
             }
         }

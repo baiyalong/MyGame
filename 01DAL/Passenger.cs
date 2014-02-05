@@ -63,7 +63,8 @@ namespace _01DAL
             this.OnTheGoBus = null;
             this.SeatNumber = 0;
             this.StandByStation = this.StartStation;
-            this.PassengerNode = new Node(this.StandByStation.StationNode);
+            if (this.StandByStation!=null&&this.StandByStation.StationNode != null)
+                this.PassengerNode = new Node(this.StandByStation.StationNode);
         }
 
     }

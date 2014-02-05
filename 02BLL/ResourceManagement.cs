@@ -72,7 +72,7 @@ namespace _02BLL
                 //init passenger
                 iPassengerList = PassengerManagement.Instance;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
                 throw;
